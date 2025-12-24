@@ -368,6 +368,15 @@ function updateCart() {
     </div>
   </div>
 </div>
+<script>
+const currentUser = sessionStorage.getItem("clientLoggedIn");
+
+if (!currentUser) {
+    alert("Vous devez être connecté pour commander");
+    window.location.href = "login.html";
+}
+</script>
+
 
 <script>
 const orderForm = document.getElementById("orderForm");
