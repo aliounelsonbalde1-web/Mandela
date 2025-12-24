@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mandela.com</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+   
+  body {
+    background: url("images/arrier.jpeg") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .auth-card {
+    background: rgba(5, 205, 235, 0.95);
+    border-radius: 15px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  }
+
+  .toggle-link {
+    cursor: pointer;
+    color: #2b7a0b;
+    font-weight: bold;
+  }
+
+  </style>
+</head>
+<body>
+
+<div class="auth-card text-center">
+  <h3 id="authTitle" class="mb-4 text-success fw-bold">Connexion</h3>
+
+  <form id="loginForm">
+    <div class="mb-3 text-start">
+      <label class="form-label">Nom d'utilisateur</label>
+      <input type="text" class="form-control" id="username" required>
+    </div>
+    <div class="mb-3 text-start">
+      <label class="form-label">Mot de passe</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
+    <button type="submit" class="btn btn-success w-100 mb-2">Se connecter</button>
+  </form>
+
+  <p>Pas de compte ? <span class="toggle-link" id="showSignup">Créer</span></p>
+
+  <form id="signupForm" style="display:none;">
+    <div class="mb-3 text-start">
+      <label class="form-label">Nom d'utilisateur</label>
+      <input type="text" id="newUser" class="form-control" required>
+    </div>
+    <div class="mb-3 text-start">
+      <label class="form-label">Mot de passe</label>
+      <input type="password" id="newPass" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-2">Créer le compte</button>
+  </form>
+</div>
+
+<script>
+if (sessionStorage.getItem("clientLoggedIn")) {
+    window.location.href = "index.html";
+}
+
+document.getElementById("showSignup").onclick = () => {
+  document.getElementById("loginForm").style.display="none";
+  document.getElementById("signupForm").style.display="block";
+};
+
+document.getElementById("signupForm").onsubmit = (e) => {
+  e.preventDefault();
+  localStorage.setItem("user", document.getElementById("newUser").value);
+  localStorage.setItem("pass", document.getElementById("newPass").value);
+  alert("✅ Compte créé, connectez-vous !");
+  location.reload();
+};
+
+document.getElementById("loginForm").onsubmit = (e) => {
+  e.preventDefault();
+  if (
+    document.getElementById("username").value === localStorage.getItem("user") &&
+    document.getElementById("password").value === localStorage.getItem("pass")
+  ) {
+    sessionStorage.setItem("clientLoggedIn", "true");
+    window.location.href = "index.html";
+  } else {
+    alert("❌ Identifiants incorrects");
+  }
+};
+</script>
+
+</body>
+</html>

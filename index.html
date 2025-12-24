@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Commerce Pro – Savons Naturels</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Arrière-plan vert + jaune + rouge */
+       body {
+    background: url('images/arière-plan.jpeg') no-repeat center center fixed;
+    background-size: cover; /* couvre tout l'écran */
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+
+
+        /* Logo */
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Cartes produits */
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.03);
+        }
+
+        /* Images même taille */
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .price {
+            color: green;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        @media (max-width: 576px) {
+    .logo {
+        font-size: 20px;
+    }
+
+    .product-card img {
+        height: 160px;
+    }
+
+    .price {
+        font-size: 16px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <span class="logo">🧼 Mandela.com</span>
+    
+         <button class="btn btn-warning ms-auto" data-bs-toggle="modal" data-bs-target="#cartModal">
+    🛒 Panier (<span id="cartCount">0</span>)
+</button>
+
+        
+         <button class="btn btn-outline-light ms-2" data-bs-toggle="modal" data-bs-target="#accountModal">
+    👤 Mon compte
+</button>
+
+    </div>
+</nav>
+  
+
+<!-- BARRE DE RECHERCHE -->
+<div class="container search-bar">
+    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un savon...">
+</div>
+
+<!-- PRODUITS -->
+<div class="container mb-5">
+    <div class="row" id="productList">
+        <script>
+const currentUser = sessionStorage.getItem("clientLoggedIn");
+if (!currentUser) {
+    window.location.href = "login.html";
+}
+</script>
+
+
+        <!-- PRODUIT TEMPLATE -->
+        <script>
+const products = [
+     { name: "Savon Aloe Vera", price: 2000, img: "images/im1.jpeg" },
+    { name: "Savon Miel", price: 2100, img: "images/im2.jpeg" },
+    { name: "Savon Karité", price: 2200, img: "images/im3.jpeg" },
+    { name: "Savon Citron", price: 2300, img: "images/im4.jpeg" },
+    { name: "Savon Lavande", price: 2400, img: "images/im5.jpeg" },
+    { name: "Savon Charbon", price: 2500, img: "images/im6.jpeg" },
+    { name: "Savon Neem",price: 2200, img: "images/im7.jpeg" },
+    { name: "Savon Curcuma",price: 2200, img: "images/im8.jpeg" },
+    { name: "Savon Menthe",price: 2200, img: "images/im9.jpeg" },
+    { name: "Savon Coco",price: 2200, img: "images/im10.jpeg" },
+    { name: "Savon Rose",price: 2200, img: "images/im12.jpeg" },
+    { name: "Savon Gingembre",price: 2200, img: "images/im.jpeg" },
+    { name: "Savon Olive",price: 2200, img: "images/im.jpeg" },
+    { name: "Savon Orange",price: 2200, img: "images/im.jpeg" },
+    { name: "Savon Café",price: 2200, img: "images/im.jpeg" },
+    { name: "Savon Avocat",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Papaye",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Banane",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Mangue",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Vanille",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Eucalyptus",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Cannelle",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Thé Vert",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Ananas",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Fraise",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Aloe & Miel",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Karité & Coco",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Curcuma & Citron",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Lavande & Rose",price: 2200, img: "image/im.jpeg" },
+    { name: "Savon Neem & Charbon",price: 2200, img: "image/im.jpeg" }
+];
+const productList = document.getElementById("productList");
+let cart = [];
+
+/* 🔴 AFFICHAGE DES PRODUITS + BOUTON */
+products.forEach(product => {
+    productList.innerHTML += `
+        <div class="col-md-4 col-lg-3 mb-4 product-item">
+            <div class="product-card">
+                <img src="${product.img}" alt="${product.name}">
+                <div class="p-3">
+                    <h6 class="product-name">${product.name}</h6>
+                    <p>Savon naturel bio.</p>
+                    <p class="price">${product.price} FCFA</p>
+
+                    <!-- ✅ LE BOUTON EST ICI -->
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(product)})'>
+                        Ajouter au panier
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+});
+
+/* 🛒 PANIER */
+
+
+
+function addToCart(product) {
+    const existing = cart.find(item => item.name === product.name);
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push({ ...product, qty: 1 });
+    }
+    updateCart();
+    
+
+}
+
+function increaseQty(i) { cart[i].qty++; updateCart(); }
+function decreaseQty(i) {
+    cart[i].qty > 1 ? cart[i].qty-- : cart.splice(i,1);
+    updateCart();
+}
+function removeFromCart(i) { cart.splice(i,1); updateCart(); }
+
+function updateCart() {
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount");
+
+    cartItems.innerHTML = "";
+    let total = 0, count = 0;
+
+    cart.forEach((item, i) => {
+        total += item.price * item.qty;
+        count += item.qty;
+        cartItems.innerHTML += `
+            <div class="d-flex justify-content-between mb-2">
+                <div>${item.name} (${item.qty})</div>
+                <div>
+                    <button class="btn btn-sm btn-success" onclick="increaseQty(${i})">+</button>
+                    <button class="btn btn-sm btn-warning" onclick="decreaseQty(${i})">−</button>
+                    <button class="btn btn-sm btn-danger" onclick="removeFromCart(${i})">❌</button>
+                </div>
+            </div>
+        `;
+    });
+
+    cartTotal.textContent = total;
+    cartCount.textContent = count;
+
+    
+
+
+}
+</script>
+
+<!-- JAVASCRIPT RECHERCHE -->
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const productsItems = document.querySelectorAll(".product-item");
+
+    searchInput.addEventListener("keyup", function () {
+        const value = this.value.toLowerCase();
+
+        productsItems.forEach(item => {
+            const name = item.querySelector(".product-name").textContent.toLowerCase();
+            item.style.display = name.includes(value) ? "block" : "none";
+        });
+    });
+</script>
+
+<!-- MODAL PANIER -->
+<div class="modal fade" id="cartModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">🛒 Mon Panier</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div id="cartItems"></div>
+        <hr>
+        <h5>Total : <span id="cartTotal">0</span> FCFA</h5>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderModal">Commander</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL MON COMPTE -->
+<div class="modal fade" id="accountModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">👤 Mon compte</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p><strong>Utilisateur :</strong> <span id="accountUser"></span></p>
+        <hr>
+
+        <h6>📦 Mes commandes</h6>
+        <div id="accountOrders"></div>
+
+        <hr>
+        <button class="btn btn-danger" onclick="clearOrders()">🗑️ Vider ma boîte</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL FORMULAIRE DE COMMANDE -->
+<div class="modal fade" id="orderModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">📦 Informations de Livraison</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="orderForm">
+          <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom</label>
+            <input type="text" id="prenom" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" id="nom" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="adresse" class="form-label">Adresse de livraison</label>
+            <input type="text" id="adresse" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="telephone" class="form-label">Numéro de téléphone</label>
+            <input type="tel" id="telephone" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Valider la commande</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION DE PAIEMENT -->
+<div class="modal fade" id="paymentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">💳 Paiement requis</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Nous vous prions de faire votre paiement sur Wave via ce numéro : <strong>78 287 58 37</strong> 
+          pour que nous puissions livrer vos produits à temps. payer avec le numero de téléphone que vous avait utiliser pour la commande .
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+        <button type="button" class="btn btn-success" id="confirmPayment">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const orderForm = document.getElementById("orderForm");
+
+let whatsappURL = ""; // on stocke l'URL WhatsApp pour le bouton OK
+
+orderForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const prenom = document.getElementById("prenom").value;
+    const nom = document.getElementById("nom").value;
+    const adresse = document.getElementById("adresse").value;
+    const telephone = document.getElementById("telephone").value;
+
+    if(cart.length === 0){
+        alert("Votre panier est vide !");
+        return;
+    }
+
+    // Générer la liste des produits
+    const produitText = cart.map(item => `${item.name} x${item.qty}`).join(", ");
+    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+    // Ajouter la commande dans la boîte “Mes commandes”
+    let orders = JSON.parse(localStorage.getItem("orders") || "{}");
+    if(!orders[currentUser]) orders[currentUser] = [];
+    orders[currentUser].push({
+        items: produitText,
+        total: total,
+        date: new Date().toLocaleString()
+    });
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    // Préparer WhatsApp
+    whatsappURL = `https://wa.me/221782875837?text=${encodeURIComponent(
+        `Bonjour, je souhaite commander les produits suivants :\nProduits : ${produitText}\nTotal : ${total} FCFA\nNom : ${prenom} ${nom}\nAdresse : ${adresse}\nTéléphone : ${telephone}`
+    )}`;
+
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+});
+
+
+// Redirection vers WhatsApp quand l'utilisateur clique sur OK
+document.getElementById("confirmPayment").addEventListener("click", function() {
+    if(whatsappURL) {
+        window.open(whatsappURL, "_blank");
+    }
+    // fermer le modal
+    const paymentModalEl = document.getElementById('paymentModal');
+    const modal = bootstrap.Modal.getInstance(paymentModalEl);
+    modal.hide();
+});
+</script>
+
+<script>
+function loadAccountBox() {
+    const user = currentUser;
+    document.getElementById("accountUser").textContent = user;
+
+    const orders = JSON.parse(localStorage.getItem("orders") || "{}");
+    const userOrders = orders[user] || [];
+
+    const box = document.getElementById("accountOrders");
+    box.innerHTML = "";
+
+    if(userOrders.length === 0){
+        box.innerHTML = "<p>Aucune commande enregistrée.</p>";
+        return;
+    }
+
+    userOrders.forEach((order, index) => {
+        box.innerHTML += `
+            <div class="border rounded p-2 mb-2">
+                <strong>Commande ${index + 1}</strong><br>
+                ${order.items}<br>
+                <strong>Total :</strong> ${order.total} FCFA<br>
+                <small>${order.date}</small>
+            </div>
+        `;
+    });
+}
+
+// Charger quand le modal s’ouvre
+document.getElementById("accountModal").addEventListener("show.bs.modal", loadAccountBox);
+
+// Vider les commandes
+function clearOrders(){
+    let orders = JSON.parse(localStorage.getItem("orders") || "{}");
+    orders[currentUser] = [];
+    localStorage.setItem("orders", JSON.stringify(orders));
+    loadAccountBox();
+}
+</script>
+
+<script>
+function logout() {
+  sessionStorage.removeItem("clientLoggedIn");
+  window.location.href = "login.html";
+}
+</script>
+<script>
+if (!sessionStorage.getItem("clientLoggedIn")) {
+    window.location.href = "login.html";
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
