@@ -10,12 +10,14 @@
 
     <style>
         /* Arrière-plan vert + jaune + rouge */
-       body {
-    background: url('images/arière-plan.jpeg') no-repeat center center fixed;
-    background-size: cover; /* couvre tout l'écran */
+    
+   body {
+    background: url('images/arriere-plan.jpeg') no-repeat center center;
+    background-size: cover;
     min-height: 100vh;
     font-family: Arial, sans-serif;
 }
+
 
 
 
@@ -69,7 +71,35 @@
     .price {
         font-size: 16px;
     }
+    
 }
+@media (max-width: 576px) {
+    .product-card {
+        font-size: 14px;
+    }
+
+    .product-card p {
+        margin-bottom: 5px;
+    }
+
+    .product-card img {
+        height: 140px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+@media (max-width: 576px) {
+    .search-bar {
+        padding: 0 10px;
+    }
+}
+.modal-dialog {
+    margin: 10px;
+}
+
 
     </style>
 </head>
@@ -77,7 +107,8 @@
 <body>
     
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+    <div class="container d-flex flex-wrap gap-2">
+
         <span class="logo">🧼 Mandela.com</span>
     
          <button class="btn btn-warning ms-auto" data-bs-toggle="modal" data-bs-target="#cartModal">
@@ -101,12 +132,7 @@
 <!-- PRODUITS -->
 <div class="container mb-5">
     <div class="row" id="productList">
-        <script>
-const currentUser = sessionStorage.getItem("clientLoggedIn");
-if (!currentUser) {
-    window.location.href = "login.html";
-}
-</script>
+      
 
 
         <!-- PRODUIT TEMPLATE -->
@@ -149,7 +175,8 @@ let cart = [];
 /* 🔴 AFFICHAGE DES PRODUITS + BOUTON */
 products.forEach(product => {
     productList.innerHTML += `
-        <div class="col-md-4 col-lg-3 mb-4 product-item">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 product-item">
+
             <div class="product-card">
                 <img src="${product.img}" alt="${product.name}">
                 <div class="p-3">
