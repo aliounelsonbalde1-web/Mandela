@@ -95,6 +95,42 @@ body {
         padding: 0 10px;
     }
 }
+#whatsappBtn {
+    position: fixed;
+    bottom: 90px; /* juste au-dessus du bouton menu flottant */
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #25d366, #128c7e, #075e54, #00e676);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1001;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#whatsappBtn:hover {
+    transform: scale(1.2);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+#welcomeBanner {
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Responsive pour mobile */
+@media (max-width: 576px) {
+    #welcomeBanner {
+        font-size: 14px;
+        padding: 8px 5px;
+    }
+}
 
 
 
@@ -130,8 +166,13 @@ body {
 
 
     </div>
+    
 </nav>
-  
+<!-- ================= BANNIÈRE DE BIENVENUE ================= -->
+<div id="welcomeBanner" class="text-center text-white py-2">
+    👋 Bienvenue sur Mandela.com – Découvrez nos produits naturels et tendances !
+</div>
+
 
 <!-- BARRE DE RECHERCHE -->
 <div class="container search-bar">
@@ -176,26 +217,29 @@ let cart = [];
 /* 🔴 AFFICHAGE DES PRODUITS + BOUTON */
 products.forEach(product => {
     document.write(`
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 product-item">
             <div class="product-card">
 
-                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <!-- IMAGE DANS UN CADRE CARRÉ -->
                 <div class="img-square">
                     <img src="${product.img}" alt="${product.name}">
                 </div>
 
                 <div class="p-3 text-center">
-                    <h6>${product.name}</h6>
+                    <h6 class="product-name">${product.name}</h6>
                     <p class="price">${product.price} FCFA</p>
-                    <button class="btn btn-success w-100">
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(product)})'>
                         Ajouter au panier
-                    </button>
+                  
+
                 </div>
 
             </div>
         </div>
     `);
 });
+
 
 /* 🛒 PANIER */
 
@@ -242,7 +286,7 @@ function updateCart() {
             </div>
         `;
     });
-
+  
     cartTotal.textContent = total;
     cartCount.textContent = count;
 
@@ -497,45 +541,47 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
 
     <div class="row">
 
-        <script>
-        const montres = [
-            { name: "Montre Classique", price: 12000, img: "montres/a.jpeg" },
-            { name: "Montre Homme Luxe", price: 15000, img: "montres/b.jpeg" },
-            { name: "Montre Femme Élégante", price: 13000, img: "montres/c.jpeg" },
-            { name: "Montre Sport", price: 11000, img: "montres/d.jpeg" },
-            { name: "Montre Digitale", price: 10000, img: "montres/e.jpeg" },
-            { name: "Montre Enfant", price: 8000, img: "montres/f.jpeg" },
-            { name: "Montre Bracelet Cuir", price: 14000, img: "montres/g.jpeg" },
-            { name: "Montre Bracelet Métal", price: 16000, img: "montres/h.jpeg" },
-            { name: "Montre Étanche", price: 17000, img: "montres/i.jpeg" },
-            { name: "Montre Moderne", price: 12500, img: "montres/j.jpeg" },
-            { name: "Montre Simple", price: 9000, img: "montres/k.jpeg" },
-            { name: "Montre Business", price: 15500, img: "montres/l.jpeg" }
-        ];
-  products.forEach(product => {
+      <script>
+const montres = [
+    { name: "Montre Classique", price: 12000, img: "montres/a.jpeg" },
+    { name: "Montre Homme Luxe", price: 15000, img: "montres/b.jpeg" },
+    { name: "Montre Femme Élégante", price: 13000, img: "montres/c.jpeg" },
+    { name: "Montre Sport", price: 11000, img: "montres/d.jpeg" },
+    { name: "Montre Digitale", price: 10000, img: "montres/e.jpeg" },
+    { name: "Montre Enfant", price: 8000, img: "montres/f.jpeg" },
+    { name: "Montre Bracelet Cuir", price: 14000, img: "montres/g.jpeg" },
+    { name: "Montre Bracelet Métal", price: 16000, img: "montres/h.jpeg" },
+    { name: "Montre Étanche", price: 17000, img: "montres/i.jpeg" },
+    { name: "Montre Moderne", price: 12500, img: "montres/j.jpeg" },
+    { name: "Montre Simple", price: 9000, img: "montres/k.jpeg" },
+    { name: "Montre Business", price: 15500, img: "montres/l.jpeg" }
+];
+
+montres.forEach(montre => {
     document.write(`
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 ">
             <div class="product-card">
 
-                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <!-- IMAGE CARRÉE -->
                 <div class="img-square">
-                    <img src="${product.img}" alt="${product.name}">
+                    <img src="${montre.img}" alt="${montre.name}">
                 </div>
 
                 <div class="p-3 text-center">
-                    <h6>${product.name}</h6>
-                    <p class="price">${product.price} FCFA</p>
-                    <button class="btn btn-success w-100">
+                    <h6>${montre.name}</h6>
+                    <p class="price">${montre.price} FCFA</p>
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(montre)})'>
                         Ajouter au panier
-                    </button>
+
                 </div>
 
             </div>
         </div>
     `);
 });
-       
-        </script>
+</script>
+ 
 
     </div>
 </div>
@@ -552,48 +598,52 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
 
     <div class="row">
 
-        <script>
-        const vetements = [
-            { name: "T-shirt Homme", price: 7000, img: "vetements/aa.jpeg" },
-            { name: "Robe Femme", price: 12000, img: "vetements/bb.jpeg" },
-            { name: "Chemise Homme", price: 9000, img: "vetements/cc.jpeg" },
-            { name: "Jean Femme", price: 11000, img: "vetements/dd.jpeg" },
-            { name: "Polo Homme", price: 8000, img: "vetements/ee.jpeg" },
-            { name: "Jupe Femme", price: 9500, img: "vetements/ff.jpeg" },
-            { name: "Veste Homme", price: 15000, img: "vetements/gg.jpeg" },
-            { name: "Blouse Femme", price: 8500, img: "vetements/hh.jpeg" },
-            { name: "Survêtement", price: 14000, img: "vetements/ii.jpeg" },
-            { name: "Robe Longue", price: 16000, img: "vetements/jj.jpeg" },
-            { name: "Short Homme", price: 6500, img: "vetements/kk.jpeg" },
-            { name: "Pantalon Femme", price: 10000, img: "vetements/ll.jpeg" },
-            { name: "T-shirt Femme", price: 7500, img: "vetements/mm.jpeg" },
-            { name: "Pull Homme", price: 13000, img: "vetements/nn.jpeg" },
-            { name: "Tenue Mixte", price: 17000, img: "vetements/oo.jpeg" }
-        ];
-   products.forEach(product => {
+      <script>
+const vetements = [
+    { name: "T-shirt Homme", price: 7000, img: "vetements/aa.jpeg" },
+    { name: "Robe Femme", price: 12000, img: "vetements/bb.jpeg" },
+    { name: "Chemise Homme", price: 9000, img: "vetements/cc.jpeg" },
+    { name: "Jean Femme", price: 11000, img: "vetements/dd.jpeg" },
+    { name: "Polo Homme", price: 8000, img: "vetements/ee.jpeg" },
+    { name: "Jupe Femme", price: 9500, img: "vetements/ff.jpeg" },
+    { name: "Veste Homme", price: 15000, img: "vetements/gg.jpeg" },
+    { name: "Blouse Femme", price: 8500, img: "vetements/hh.jpeg" },
+    { name: "Survêtement", price: 14000, img: "vetements/ii.jpeg" },
+    { name: "Robe Longue", price: 16000, img: "vetements/jj.jpeg" },
+    { name: "Short Homme", price: 6500, img: "vetements/kk.jpeg" },
+    { name: "Pantalon Femme", price: 10000, img: "vetements/ll.jpeg" },
+    { name: "T-shirt Femme", price: 7500, img: "vetements/mm.jpeg" },
+    { name: "Pull Homme", price: 13000, img: "vetements/nn.jpeg" },
+    { name: "Tenue Mixte", price: 17000, img: "vetements/oo.jpeg" }
+];
+
+vetements.forEach(vetement => {
     document.write(`
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 ">
             <div class="product-card">
 
                 <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
                 <div class="img-square">
-                    <img src="${product.img}" alt="${product.name}">
+                    <img src="${vetement.img}" alt="${vetement.name}">
                 </div>
 
                 <div class="p-3 text-center">
-                    <h6>${product.name}</h6>
-                    <p class="price">${product.price} FCFA</p>
-                    <button class="btn btn-success w-100">
+                    <h6>${vetement.name}</h6>
+                    <p class="price">${vetement.price} FCFA</p>
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(vetement)})'>
                         Ajouter au panier
-                    </button>
+                 </button>
+
+
                 </div>
 
             </div>
         </div>
     `);
 });
-       
-        </script>
+</script>
+ 
 
     </div>
 </div>
@@ -609,40 +659,43 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
     <div class="row">
 
       <script>
-      const telephones = [
-        // 4 Tecno
-        { name: "Tecno Spark 10", price: 70000, img: "telephones/aaa.jpeg" },
-        { name: "Tecno Camon 20", price: 90000, img: "telephones/bbb.jpeg" },
-        { name: "Tecno Pouvoir 5", price: 80000, img: "telephones/ccc.jpeg" },
-        { name: "Tecno Phantom X", price: 120000, img: "telephones/ddd.jpeg" },
-        // 4 Samsung
-        { name: "Samsung Galaxy A13", price: 95000, img: "telephones/eee.jpeg" },
-        { name: "Samsung Galaxy S21", price: 250000, img: "telephones/fff.jpeg" },
-        { name: "Samsung Galaxy Note 20", price: 300000, img: "telephones/ggg.jpeg" },
-        { name: "Samsung Galaxy Z Flip", price: 450000, img: "telephones/hhh.jpeg" },
-        // 4 iPhone
-        { name: "iPhone 12", price: 400000, img: "telephones/iii.jpeg" },
-        { name: "iPhone 13", price: 500000, img: "telephones/jjj.jpeg" },
-        { name: "iPhone 14", price: 600000, img: "telephones/kkk.jpeg" },
-        { name: "iPhone 15", price: 750000, img: "telephones/lll.jpeg" }
-      ];
+const telephones = [
+    // 4 Tecno
+    { name: "Tecno Spark 10", price: 70000, img: "telephones/aaa.jpeg" },
+    { name: "Tecno Camon 20", price: 90000, img: "telephones/bbb.jpeg" },
+    { name: "Tecno Pouvoir 5", price: 80000, img: "telephones/ccc.jpeg" },
+    { name: "Tecno Phantom X", price: 120000, img: "telephones/ddd.jpeg" },
+    // 4 Samsung
+    { name: "Samsung Galaxy A13", price: 95000, img: "telephones/eee.jpeg" },
+    { name: "Samsung Galaxy S21", price: 250000, img: "telephones/fff.jpeg" },
+    { name: "Samsung Galaxy Note 20", price: 300000, img: "telephones/ggg.jpeg" },
+    { name: "Samsung Galaxy Z Flip", price: 450000, img: "telephones/hhh.jpeg" },
+    // 4 iPhone
+    { name: "iPhone 12", price: 400000, img: "telephones/iii.jpeg" },
+    { name: "iPhone 13", price: 500000, img: "telephones/jjj.jpeg" },
+    { name: "iPhone 14", price: 600000, img: "telephones/kkk.jpeg" },
+    { name: "iPhone 15", price: 750000, img: "telephones/lll.jpeg" }
+];
 
-products.forEach(product => {
+telephones.forEach(telephone => {
     document.write(`
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 ">
             <div class="product-card">
 
                 <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
                 <div class="img-square">
-                    <img src="${product.img}" alt="${product.name}">
+                    <img src="${telephone.img}" alt="${telephone.name}">
                 </div>
 
                 <div class="p-3 text-center">
-                    <h6>${product.name}</h6>
-                    <p class="price">${product.price} FCFA</p>
-                    <button class="btn btn-success w-100">
-                        Ajouter au panier
+                    <h6>${telephone.name}</h6>
+                    <p class="price">${telephone.price} FCFA</p>
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(telephone)})'>
+                        Ajouter au panie
                     </button>
+
+
                 </div>
 
             </div>
@@ -667,40 +720,44 @@ products.forEach(product => {
     </h3>
 
     <div class="row">
+<script>
+const chargeurs = [
+    { name: "Chargeur USB Standard", price: 3000, img: "telephones/aaaa.jpeg" },
+    { name: "Chargeur Rapide", price: 5000, img: "telephones/bbbb.jpeg" },
+    { name: "Chargeur Samsung", price: 4500, img: "telephones/cccc.jpeg" },
+    { name: "Chargeur iPhone", price: 6000, img: "telephones/dddd.jpeg" },
+    { name: "Chargeur Double Port", price: 5500, img: "telephones/eeee.jpeg" },
+    { name: "Chargeur Voiture", price: 4000, img: "telephones/ffff.jpeg" }
+];
 
-        <script>
-        const chargeurs = [
-            { name: "Chargeur USB Standard", price: 3000, img: "telephones/aaaa.jpeg" },
-            { name: "Chargeur Rapide", price: 5000, img: "telephones/bbbb.jpeg" },
-            { name: "Chargeur Samsung", price: 4500, img: "telephones/cccc.jpeg" },
-            { name: "Chargeur iPhone", price: 6000, img: "telephones/dddd.jpeg" },
-            { name: "Chargeur Double Port", price: 5500, img: "telephones/eeee.jpeg" },
-            { name: "Chargeur Voiture", price: 4000, img: "telephones/ffff.jpeg" }
-        ];
-products.forEach(product => {
+chargeurs.forEach(chargeur => {
     document.write(`
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3 mb-4 product-item">
             <div class="product-card">
 
                 <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
                 <div class="img-square">
-                    <img src="${product.img}" alt="${product.name}">
+                    <img src="${chargeur.img}" alt="${chargeur.name}">
                 </div>
 
                 <div class="p-3 text-center">
-                    <h6>${product.name}</h6>
-                    <p class="price">${product.price} FCFA</p>
-                    <button class="btn btn-success w-100">
+                    <h6>${chargeur.name}</h6>
+                    <p class="price">${chargeur.price} FCFA</p>
+                    <button class="btn btn-success w-100"
+                        onclick='addToCart(${JSON.stringify(chargeur)})'>
                         Ajouter au panier
                     </button>
+                  
+ 
                 </div>
 
             </div>
         </div>
     `);
 });
+</script>
+
        
-        </script>
 
     </div>
 </div>
@@ -781,6 +838,47 @@ products.forEach(product => {
       });
     });
   </script>
+ <!-- ================= BOUTON WHATSAPP FLOTTANT ================= -->
+<a href="https://wa.me/221782875837" target="_blank" id="whatsappBtn" title="Contactez-nous sur WhatsApp">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer bg-dark text-white pt-4 pb-4">
+  <div class="container">
+    <div class="row">
+
+      <!-- À propos -->
+      <div class="col-md-4 mb-3">
+        <h5>À propos de Mandela.com</h5>
+        <p>Vente de savons, vêtements, montres et téléphones. Livraison rapide et paiement sécurisé.</p>
+      </div>
+
+      <!-- Contact & réseaux -->
+      <div class="col-md-4 mb-3">
+        <h5>Contact</h5>
+        <p>📞 +221 78 287 58 37</p>
+        <p>📧 badealiounelson900@gmail.com</p>
+        <div class="d-flex gap-2">
+          <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white fs-4"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-white fs-4"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="bg-light">
+    <p class="text-center mb-0">&copy; 2025 Mandela.com. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap Icons CDN pour les icônes réseaux -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
+<!-- Bootstrap Icons CDN pour les icônes réseaux -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
