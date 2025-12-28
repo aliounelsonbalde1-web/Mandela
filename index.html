@@ -9,39 +9,73 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Arrière-plan vert + jaune + rouge */
-    
-   body {
+      /* ==================== BODY ==================== */
+body {
     background: url('images/ariere-plan.jpeg') no-repeat center center;
     background-size: cover;
     min-height: 100vh;
     font-family: Arial, sans-serif;
 }
-/* Cartes produits */
+
+/* ==================== LOGO ==================== */
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+}
+
+/* ==================== CARTES PRODUITS ==================== */
 .product-card {
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: transform 0.3s;
-    overflow: hidden; /* important pour le carré */
+    overflow: hidden;
 }
 
 .product-card:hover {
     transform: scale(1.03);
 }
 
-/* Images (PC & tablette) */
-.product-card img {
+/* ==================== CONTENEUR IMAGE CARRÉ ==================== */
+.img-square {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    aspect-ratio: 1 / 1;     /* ✅ carré parfait */
+    background: #f5f5f5;
+    overflow: hidden;
 }
 
-/* 📱 Téléphone : images carrées */
+/* Image dans le carré */
+.img-square img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* remplit le carré sans déformation */
+    display: block;
+}
+
+/* ==================== TEXTE & PRIX ==================== */
+.price {
+    color: green;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* ==================== SEARCH BAR ==================== */
+.search-bar {
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+/* ==================== MODAL ==================== */
+.modal-dialog {
+    margin: 10px;
+}
+
+/* ==================== 📱 MOBILE (TÉLÉPHONE) ==================== */
 @media (max-width: 576px) {
-    .product-card img {
-        height: auto;
-        aspect-ratio: 1 / 1; /* 🔥 carré parfait */
+
+    .logo {
+        font-size: 20px;
     }
 
     .product-card h6 {
@@ -56,41 +90,10 @@
         font-size: 14px;
         padding: 8px;
     }
-}
 
-        /* Logo */
-        .logo {
-            font-size: 26px;
-            font-weight: bold;
-            color: white;
-        }
-
-       
-
-        .price {
-            color: green;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .search-bar {
-            max-width: 500px;
-            margin: 20px auto;
-        }
-        @media (max-width: 576px) {
-    .logo {
-        font-size: 20px;
-    }
-
-   
-}
-@media (max-width: 576px) {
     .search-bar {
         padding: 0 10px;
     }
-}
-.modal-dialog {
-    margin: 10px;
 }
 
 
@@ -172,24 +175,26 @@ let cart = [];
 
 /* 🔴 AFFICHAGE DES PRODUITS + BOUTON */
 products.forEach(product => {
-    productList.innerHTML += `
+    document.write(`
         <div class="col-4 col-md-4 col-lg-3 mb-4">
             <div class="product-card">
-                <img src="${product.img}" alt="${product.name}">
-                <div class="p-3">
-                    <h6 class="product-name">${product.name}</h6>
-                    <p>Savon naturel bio.</p>
-                    <p class="price">${product.price} FCFA</p>
 
-                    <!-- ✅ LE BOUTON EST ICI -->
-                    <button class="btn btn-success w-100"
-                        onclick='addToCart(${JSON.stringify(product)})'>
+                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <div class="img-square">
+                    <img src="${product.img}" alt="${product.name}">
+                </div>
+
+                <div class="p-3 text-center">
+                    <h6>${product.name}</h6>
+                    <p class="price">${product.price} FCFA</p>
+                    <button class="btn btn-success w-100">
                         Ajouter au panier
                     </button>
                 </div>
+
             </div>
         </div>
-    `;
+    `);
 });
 
 /* 🛒 PANIER */
@@ -507,24 +512,29 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
             { name: "Montre Simple", price: 9000, img: "montres/k.jpeg" },
             { name: "Montre Business", price: 15500, img: "montres/l.jpeg" }
         ];
+  products.forEach(product => {
+    document.write(`
+        <div class="col-4 col-md-4 col-lg-3 mb-4">
+            <div class="product-card">
 
-        montres.forEach(montre => {
-            document.write(`
-                  <div class="col-4 col-md-4 col-lg-3 mb-4">
-                    <div class="product-card">
-                        <img src="${montre.img}" alt="${montre.name}">
-                        <div class="p-3">
-                            <h6>${montre.name}</h6>
-                            <p class="price">${montre.price} FCFA</p>
-                            <button class="btn btn-success w-100"
-                                onclick='addToCart(${JSON.stringify(montre)})'>
-                                Ajouter au panier
-                            </button>
-                        </div>
-                    </div>
+                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <div class="img-square">
+                    <img src="${product.img}" alt="${product.name}">
                 </div>
-            `);
-        });
+
+                <div class="p-3 text-center">
+                    <h6>${product.name}</h6>
+                    <p class="price">${product.price} FCFA</p>
+                    <button class="btn btn-success w-100">
+                        Ajouter au panier
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    `);
+});
+       
         </script>
 
     </div>
@@ -560,24 +570,29 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
             { name: "Pull Homme", price: 13000, img: "vetements/nn.jpeg" },
             { name: "Tenue Mixte", price: 17000, img: "vetements/oo.jpeg" }
         ];
+   products.forEach(product => {
+    document.write(`
+        <div class="col-4 col-md-4 col-lg-3 mb-4">
+            <div class="product-card">
 
-        vetements.forEach(vetement => {
-            document.write(`
-                <div class="col-4 col-md-4 col-lg-3 mb-4">
-                    <div class="product-card">
-                        <img src="${vetement.img}" alt="${vetement.name}">
-                        <div class="p-3">
-                            <h6>${vetement.name}</h6>
-                            <p class="price">${vetement.price} FCFA</p>
-                            <button class="btn btn-success w-100"
-                                onclick='addToCart(${JSON.stringify(vetement)})'>
-                                Ajouter au panier
-                            </button>
-                        </div>
-                    </div>
+                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <div class="img-square">
+                    <img src="${product.img}" alt="${product.name}">
                 </div>
-            `);
-        });
+
+                <div class="p-3 text-center">
+                    <h6>${product.name}</h6>
+                    <p class="price">${product.price} FCFA</p>
+                    <button class="btn btn-success w-100">
+                        Ajouter au panier
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    `);
+});
+       
         </script>
 
     </div>
@@ -612,23 +627,31 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
         { name: "iPhone 15", price: 750000, img: "telephones/lll.jpeg" }
       ];
 
-      telephones.forEach(tel => {
-        document.write(`
-          <div class="col-4 col-md-4 col-lg-3 mb-4">
+products.forEach(product => {
+    document.write(`
+        <div class="col-4 col-md-4 col-lg-3 mb-4">
             <div class="product-card">
-              <img src="${tel.img}" alt="${tel.name}">
-              <div class="p-3">
-                <h6>${tel.name}</h6>
-                <p class="price">${tel.price} FCFA</p>
-                <button class="btn btn-success w-100"
-                    onclick='addToCart(${JSON.stringify(tel)})'>
-                    Ajouter au panier
-                </button>
-              </div>
+
+                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <div class="img-square">
+                    <img src="${product.img}" alt="${product.name}">
+                </div>
+
+                <div class="p-3 text-center">
+                    <h6>${product.name}</h6>
+                    <p class="price">${product.price} FCFA</p>
+                    <button class="btn btn-success w-100">
+                        Ajouter au panier
+                    </button>
+                </div>
+
             </div>
-          </div>
-        `);
-      });
+        </div>
+    `);
+});
+</script>
+
+      
       </script>
 
     </div>
@@ -654,24 +677,29 @@ if (!sessionStorage.getItem("clientLoggedIn")) {
             { name: "Chargeur Double Port", price: 5500, img: "telephones/eeee.jpeg" },
             { name: "Chargeur Voiture", price: 4000, img: "telephones/ffff.jpeg" }
         ];
+products.forEach(product => {
+    document.write(`
+        <div class="col-4 col-md-4 col-lg-3 mb-4">
+            <div class="product-card">
 
-        chargeurs.forEach(chargeur => {
-            document.write(`
-                <div class="col-4 col-md-4 col-lg-3 mb-4">
-                    <div class="product-card">
-                        <img src="${chargeur.img}" alt="${chargeur.name}">
-                        <div class="p-3">
-                            <h6>${chargeur.name}</h6>
-                            <p class="price">${chargeur.price} FCFA</p>
-                            <button class="btn btn-success w-100"
-                                onclick='addToCart(${JSON.stringify(chargeur)})'>
-                                Ajouter au panier
-                            </button>
-                        </div>
-                    </div>
+                <!-- ✅ IMAGE DANS UN CADRE CARRÉ -->
+                <div class="img-square">
+                    <img src="${product.img}" alt="${product.name}">
                 </div>
-            `);
-        });
+
+                <div class="p-3 text-center">
+                    <h6>${product.name}</h6>
+                    <p class="price">${product.price} FCFA</p>
+                    <button class="btn btn-success w-100">
+                        Ajouter au panier
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    `);
+});
+       
         </script>
 
     </div>
